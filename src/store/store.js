@@ -1,11 +1,13 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { router } from '../main';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     gapi: {},
+    alertify: {},
     labels: [],
     allMessages: [], //currently loaded all messages
     isSignedIn: false
@@ -13,6 +15,9 @@ export default new Vuex.Store({
   mutations: {
     SET_GAPI_INSTANCE(state, payload) {
       state.gapi = payload;
+    },
+    SET_ALERTIFY_INSTANCE(state, payload) {
+      state.alertify = payload;
     },
     SET_LABELS(state, payload) {
       state.labels = payload;
@@ -32,10 +37,10 @@ export default new Vuex.Store({
             .getAuthInstance()
             .signIn()
             .then(googleUser => {
-              console.log('Successfully logged in');
-              console.log(googleUser);
+              vueInstance.$alertify.success(`Successfully logged in as ${googleUser.w3.ig}`);
               context.commit('SET_SIGNED_IN', true);
               context.commit('SET_GAPI_INSTANCE', gapi);
+              context.commit('SET_ALERTIFY_INSTANCE', vueInstance.$alertify);
               gapi.client.gmail.users.labels
                 .list({
                   userId: 'me'
@@ -53,24 +58,25 @@ export default new Vuex.Store({
       let gapi = context.getters.gapi;
       let request;
       request = gapi.client.gmail.users.messages.list({
-        userId: "me",
+        userId: 'me',
         maxResults: 10
       });
 
       request.execute(function(response) {
         for (let message of response.messages) {
           var messageRequest = gapi.client.gmail.users.messages.get({
-            userId: "me",
+            userId: 'me',
             id: message.id
           });
           messageRequest.execute(function(resp) {
-            context.commit("APPEND_MESSAGE", resp);
+            context.commit('APPEND_MESSAGE', resp);
           });
         }
       });
 	},
 	sendMessage(context, {headers, message}) {
     let gapi = context.getters.gapi;
+    let alertify = context.getters.alertify;
 		var email = '';
         for(var header in headers)
           email += header += ": "+headers[header]+"\r\n";
@@ -83,7 +89,8 @@ export default new Vuex.Store({
       }
     });
     sendRequest.execute(function(resp) {
-      console.log(resp);
+      alertify.success('Successfully sent message');
+      router.push({ name: 'allMessages' });
     });
 	}
   },
@@ -93,12 +100,15 @@ export default new Vuex.Store({
     },
     isSignedIn: state => {
       return state.isSignedIn;
-	},
-	allMessages: state => {
-		return state.allMessages;
-  },
-  gapi: state => {
-    return state.gapi;
-  }
+    },
+    allMessages: state => {
+      return state.allMessages;
+    },
+    gapi: state => {
+      return state.gapi;
+    },
+    alertify: state => {
+      return state.alertify;
+    }
   }
 });

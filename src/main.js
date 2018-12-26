@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import { routes } from './routes';
 import store from './store/store';
 import VueGAPI from 'vue-gapi';
+import VueAlertify from 'vue-alertify';
 
 import App from './App.vue'
 import DateFilter from './filters/date';
@@ -16,10 +17,11 @@ const apiConfig = {
 
 Vue.use(VueRouter);
 Vue.use(VueGAPI, apiConfig);
+Vue.use(VueAlertify);
 
 Vue.filter('date', DateFilter);
 
-const router = new VueRouter({
+export const router = new VueRouter({
   mode: 'history',
   routes
 });
