@@ -32,6 +32,11 @@
             ]),
             logMessages() {
                 console.log(this.allMessages);
+            },
+            logMessageBodies() {
+                for(let message in this.allMessages) {
+                    console.log(message);
+                }
             }
         },
         created() {

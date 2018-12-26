@@ -13,6 +13,9 @@
         <router-link tag="li" to="/signin" v-if="!isSignedIn">
           <a>Sign In</a>
         </router-link>
+        <li v-if="isSignedIn">
+          <a @click="logout">Log out</a>
+        </li>
       </ul>
     </div>
   </nav>
@@ -22,9 +25,12 @@
 import { mapActions, mapGetters } from "vuex";
 export default {
   methods: {
-    ...mapActions(["signIn", "signOut"]),
+    ...mapActions(['signin', 'signOut', 'signOut']),
     listLabels() {
       console.log(this.allLabels);
+    },
+    logout() {
+      this.signOut();
     }
   },
   computed: {

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { router } from '../main';
+import { router } from "../main";
 
 Vue.use(Vuex);
 
@@ -37,62 +37,81 @@ export default new Vuex.Store({
             .getAuthInstance()
             .signIn()
             .then(googleUser => {
-              vueInstance.$alertify.success(`Successfully logged in as ${googleUser.w3.ig}`);
-              context.commit('SET_SIGNED_IN', true);
-              context.commit('SET_GAPI_INSTANCE', gapi);
-              context.commit('SET_ALERTIFY_INSTANCE', vueInstance.$alertify);
+              vueInstance.$alertify.success(
+                `Successfully logged in as ${googleUser.w3.ig}`
+              );
+              context.commit("SET_SIGNED_IN", true);
+              context.commit("SET_GAPI_INSTANCE", gapi);
+              context.commit("SET_ALERTIFY_INSTANCE", vueInstance.$alertify);
               gapi.client.gmail.users.labels
                 .list({
-                  userId: 'me'
+                  userId: "me"
                 })
                 .then(function(response) {
                   var labels = response.result.labels;
-                  context.commit('SET_LABELS', labels);
+                  context.commit("SET_LABELS", labels);
                 });
-              vueInstance.$router.push({ path: 'home' });
+              vueInstance.$router.push({ path: "home" });
             });
         });
       }
+    },
+    signOut(context, vueInstance) {
+      let alertify = context.getters.alertify;
+      /* gapi.auth2.getAuthInstance().signOut().then(
+        () => {
+          alertify.success('Successfully signed out');
+          context.commit('SET_SIGNED_IN', false);
+          router.push('/signin');
+        }
+      ); */
+      vueInstance.$logout();
+      alertify.success("Successfully signed out");
+      context.commit("SET_SIGNED_IN", false);
+      router.push("/signin");
     },
     listAllMessages(context) {
       let gapi = context.getters.gapi;
       let request;
       request = gapi.client.gmail.users.messages.list({
-        userId: 'me',
+        userId: "me",
         maxResults: 10
       });
 
       request.execute(function(response) {
         for (let message of response.messages) {
           var messageRequest = gapi.client.gmail.users.messages.get({
-            userId: 'me',
+            userId: "me",
             id: message.id
           });
           messageRequest.execute(function(resp) {
-            context.commit('APPEND_MESSAGE', resp);
+            context.commit("APPEND_MESSAGE", resp);
           });
         }
       });
-	},
-	sendMessage(context, {headers, message}) {
-    let gapi = context.getters.gapi;
-    let alertify = context.getters.alertify;
-		var email = '';
-        for(var header in headers)
-          email += header += ": "+headers[header]+"\r\n";
-		email += "\r\n" + message;
-		console.log(email);
-		var sendRequest = gapi.client.gmail.users.messages.send({
-      'userId': 'me',
-      'resource': {
-        'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
-      }
-    });
-    sendRequest.execute(function(resp) {
-      alertify.success('Successfully sent message');
-      router.push({ name: 'allMessages' });
-    });
-	}
+    },
+    sendMessage(context, { headers, message }) {
+      let gapi = context.getters.gapi;
+      let alertify = context.getters.alertify;
+      var email = "";
+      for (var header in headers)
+        email += header += ": " + headers[header] + "\r\n";
+      email += "\r\n" + message;
+      console.log(email);
+      var sendRequest = gapi.client.gmail.users.messages.send({
+        userId: "me",
+        resource: {
+          raw: window
+            .btoa(email)
+            .replace(/\+/g, "-")
+            .replace(/\//g, "_")
+        }
+      });
+      sendRequest.execute(function(resp) {
+        alertify.success("Successfully sent message");
+        router.push({ name: "allMessages" });
+      });
+    }
   },
   getters: {
     allLabels: state => {
