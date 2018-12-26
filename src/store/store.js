@@ -9,7 +9,17 @@ export default new Vuex.Store({
     gapi: {},
     alertify: {},
     labels: [],
-    allMessages: [], //currently loaded all messages
+    allMessages: [],
+    messagesByLabel: {
+      'SENT': [],
+      'INBOX': [],
+      'TRASH': [],
+      'DRAFT': [],
+      'SPAM': [],
+      'UNREAD': [],
+      'IMPORTANT': [],
+      'STARRED': [],
+    },
     isSignedIn: false
   },
   mutations: {
@@ -25,8 +35,11 @@ export default new Vuex.Store({
     SET_SIGNED_IN(state, payload) {
       state.isSignedIn = payload;
     },
-    APPEND_MESSAGE(state, payload) {
-      state.allMessages.push(payload);
+    SET_ALL_MESSAGES(state, payload) {
+      state.allMessages = payload;
+    },
+    SET_MESSAGES_BY_LABEL(state, payload) {
+      state.messagesByLabel[payload.label] = payload.messages;
     }
   },
   actions: {
@@ -49,6 +62,7 @@ export default new Vuex.Store({
                 })
                 .then(function(response) {
                   var labels = response.result.labels;
+                  console.log(labels);
                   context.commit("SET_LABELS", labels);
                 });
               vueInstance.$router.push({ path: "home" });
@@ -58,21 +72,15 @@ export default new Vuex.Store({
     },
     signOut(context, vueInstance) {
       let alertify = context.getters.alertify;
-      /* gapi.auth2.getAuthInstance().signOut().then(
-        () => {
-          alertify.success('Successfully signed out');
-          context.commit('SET_SIGNED_IN', false);
-          router.push('/signin');
-        }
-      ); */
       vueInstance.$logout();
-      alertify.success("Successfully signed out");
-      context.commit("SET_SIGNED_IN", false);
-      router.push("/signin");
+      alertify.success('Successfully signed out');
+      context.commit('SET_SIGNED_IN', false);
+      router.push('/signin');
     },
     listAllMessages(context) {
       let gapi = context.getters.gapi;
       let request;
+      let allMessages = [];
       request = gapi.client.gmail.users.messages.list({
         userId: "me",
         maxResults: 10
@@ -81,13 +89,38 @@ export default new Vuex.Store({
       request.execute(function(response) {
         for (let message of response.messages) {
           var messageRequest = gapi.client.gmail.users.messages.get({
-            userId: "me",
+            userId: 'me',
             id: message.id
           });
           messageRequest.execute(function(resp) {
-            context.commit("APPEND_MESSAGE", resp);
+            allMessages.push(resp);
           });
         }
+        context.commit('SET_ALL_MESSAGES', allMessages);
+      });
+    },
+    listMessagesByLabel(context, label) {
+      let gapi = context.getters.gapi;
+      let request;
+      let messages = [];
+      let labels = [];
+      labels.push(label);
+      request = gapi.client.gmail.users.messages.list({
+        userId: 'me',
+        labelIds: labels,
+        maxResults: 10
+      });
+      request.execute(function(response) {
+        for(let message of response.messages) {
+          var messageRequest = gapi.client.gmail.users.messages.get({
+            userId: 'me',
+            id: message.id
+          });
+          messageRequest.execute(function(resp){
+            messages.push(resp);
+          });
+        }
+        context.commit('SET_MESSAGES_BY_LABEL', { label: label, messages: messages });
       });
     },
     sendMessage(context, { headers, message }) {
@@ -128,6 +161,9 @@ export default new Vuex.Store({
     },
     alertify: state => {
       return state.alertify;
+    },
+    inboxMessages: state => {
+      return state.messagesByLabel['INBOX'];
     }
   }
 });

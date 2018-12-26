@@ -6,9 +6,15 @@
           <div class="panel-body inbox-menu">
             <router-link :to="{ name: 'compose'}"><a class="btn btn-danger btn-block">New Email</a></router-link>
             <ul>
-			  <router-link tag="li" :to="{ name: 'allMessages' }">
+			        <router-link tag="li" :to="{ name: 'allMessages' }">
                 <a>
                   <i class="fa fa-inbox"></i> All mail
+                  <span class="label label-danger">4</span>
+                </a>
+              </router-link>
+              <router-link tag="li" :to="{ name: 'inboxMessages' }">
+                <a>
+                  <i class="fa fa-inbox"></i> Unread
                   <span class="label label-danger">4</span>
                 </a>
               </router-link>
@@ -39,7 +45,19 @@
                   <span class="label label-info">5</span>
                 </a>
               </li>
-              <li class="title">Labels</li>
+              <router-link tag="li" :to="{ name: 'inboxMessages' }">
+                <a>
+                  <i class="fa fa-inbox"></i> Spam
+                  <span class="label label-danger">4</span>
+                </a>
+              </router-link>
+              <router-link tag="li" :to="{ name: 'inboxMessages' }">
+                <a>
+                  <i class="fa fa-inbox"></i> Draft
+                  <span class="label label-danger">4</span>
+                </a>
+              </router-link>
+              <!-- <li class="title">Labels</li>
               <li>
                 <a href="#">Home
                   <span class="label label-danger"></span>
@@ -59,7 +77,7 @@
                 <a href="#">News
                   <span class="label label-warning"></span>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>

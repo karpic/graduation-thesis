@@ -2,6 +2,7 @@ import Home from './components/Home.vue';
 import SignIn from './components/SignIn.vue';
 import Compose from './components/messages/Compose.vue';
 import AllMessages from './components/messages/AllMessages.vue';
+import Imbox from './components/messages/Inbox.vue';
 
 export const routes = [
     { 
@@ -30,7 +31,7 @@ export const routes = [
             {
                 path: 'inbox',
                 name: 'inboxMessages',
-                component: AllMessages,
+                component: Imbox,
                 meta: {
                     requiresAuth: true
                 }
