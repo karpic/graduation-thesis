@@ -66,8 +66,7 @@
                 };
                 this.sendMessage({
                     headers, 
-                    message: this.messageText, 
-                    vueInstance: this
+                    message: this.messageText
                 });
             }
         }

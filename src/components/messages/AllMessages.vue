@@ -35,7 +35,7 @@
             }
         },
         created() {
-            this.listAllMessages(this);
+            this.listAllMessages();
         }
     }
 </script>
