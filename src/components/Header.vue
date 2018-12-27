@@ -2,7 +2,7 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <router-link to="/"><a class="navbar-brand">Mailer</a></router-link>
+        <router-link to="/"><a class="navbar-brand"></a>Mailer</a></router-link>
       </div>
       <ul class="nav navbar-nav">
         <router-link tag="li" to="/home" v-if="isSignedIn">
