@@ -10,7 +10,7 @@
                 </div><!-- /.panel-heading -->
                 <div class="panel-sub-heading inner-all">
                     <div class="pull-left">
-                        <h3 class="lead no-margin">Blankon Fullpack Admin Theme</h3>
+                        <h3 class="lead no-margin">{{ subject }}</h3>
                     </div>
                     <div class="pull-right">
                         <button class="btn btn-info btn-sm tooltips" data-container="body" data-original-title="Print" type="button" data-toggle="tooltip" data-placement="top" title=""><i class="fa fa-print"></i> </button>
@@ -22,7 +22,7 @@
                 <div class="panel-sub-heading inner-all">
                     <div class="row">
                         <div class="col-md-8 col-sm-8 col-xs-7">
-                            <span>from</span>
+                            <span>{{from}}</span>
                             to
                             <strong>me</strong>
                         </div>
@@ -56,14 +56,18 @@
 
 <script>
     import { mapActions } from 'vuex';
+    import mixin from '../mixins/mixin.js';
     export default {
+        mixins: [mixin],
         data() {
             return {
                 messageId: this.$route.params.id,
                 message: {},
                 decodedMessage: '',
                 replyClicked: false,
-                replyMessage: ''
+                replyMessage: '',
+                subject: '',
+                from: ''
             }
         },
         methods: {
@@ -103,17 +107,21 @@
                     return '';
                 }
                 this.decodedMessage = getBody(messageToDecode.payload);
+                
             },
             toggleReplyClicked() {
                 this.replyClicked = !this.replyClicked;
             },
             sendReply() {
-                console.log(this.message.payload.headers);
                 let headers = {
-                    'To': this.message.payload.headers['From'],
+                    'To': this.getHeader(this.message.payload.headers, 'Return-Path'),
                     'In-Reply-To': this.message.id
                 }
                 console.log(headers);
+                this.sendMessage({
+                    headers,
+                    message: this.replyMessage
+                });
             }
         },
         created() {
@@ -130,6 +138,8 @@
                     console.log(message);       
                     that.decodeMessage(message);
                     that.message = message;
+                    that.subject = that.getHeader(message.payload.headers, 'Subject');
+                    that.from = that.getHeader(message.payload.headers, 'From');
                 });
             });
         }
