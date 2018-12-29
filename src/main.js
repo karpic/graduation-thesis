@@ -1,11 +1,9 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router';
-import { routes } from './routes';
 import store from './store/store';
 import VueGAPI from 'vue-gapi';
 import VueAlertify from 'vue-alertify';
 import { mapMutations } from 'vuex';
-
+import { router } from './router';
 import App from './App.vue'
 import DateFilter from './filters/date';
 
@@ -16,32 +14,10 @@ const apiConfig = {
   scope: "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send"
 };
 
-Vue.use(VueRouter);
 Vue.use(VueGAPI, apiConfig);
 Vue.use(VueAlertify);
 
 Vue.filter('date', DateFilter);
-
-export const router = new VueRouter({
-  mode: 'history',
-  routes
-});
-
-router.beforeEach((to, from, next) => { 
-  let signedIn = store.getters.isSignedIn;
-  if (to.matched.some(record => record.meta.requiresAuth)) { 
-      if (!signedIn) { 
-          next({ 
-              path: '/signin', 
-              query: { redirect: to.fullPath } 
-          }) 
-      } else { 
-          next();
-      } 
-  } else { 
-      next();
-  } 
-}) 
 
 new Vue({
   el: '#app',
