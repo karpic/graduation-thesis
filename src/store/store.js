@@ -111,14 +111,16 @@ export default new Vuex.Store({
         maxResults: 10
       });
       request.execute(function(response) {
-        for(let message of response.messages) {
-          var messageRequest = gapi.client.gmail.users.messages.get({
-            userId: 'me',
-            id: message.id
-          });
-          messageRequest.execute(function(resp){
-            messages.push(resp);
-          });
+        if(response.messages){
+          for(let message of response.messages) {
+            var messageRequest = gapi.client.gmail.users.messages.get({
+              userId: 'me',
+              id: message.id
+            });
+            messageRequest.execute(function(resp){
+              messages.push(resp);
+            });
+          }
         }
         context.commit('SET_MESSAGES_BY_LABEL', { label: label, messages: messages });
       });
@@ -164,6 +166,27 @@ export default new Vuex.Store({
     },
     inboxMessages: state => {
       return state.messagesByLabel['INBOX'];
+    },
+    starredMessages: state => {
+      return state.messagesByLabel['STARRED'];
+    },
+    sentMessages: state => {
+      return state.messagesByLabel['SENT'];
+    },
+    trashMessages: state => {
+      return state.messagesByLabel['TRASH'];
+    },
+    draftMessages: state => {
+      return state.messagesByLabel['DRAFT'];
+    },
+    spamMessages: state => {
+      return state.messagesByLabel['SPAM'];
+    },
+    unreadMessages: state => {
+      return state.messagesByLabel['UNREAD'];
+    },
+    importantMessages: state => {
+      return state.messagesByLabel['IMPORTANT'];
     }
   }
 });

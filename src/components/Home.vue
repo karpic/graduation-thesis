@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="inbox">
-      <div class="col-md-3">
+      <div class="col-lg-3">
         <div class="panel panel-default">
           <div class="panel-body inbox-menu">
             <router-link :to="{ name: 'compose'}"><a class="btn btn-danger btn-block">New Email</a></router-link>
@@ -24,65 +24,44 @@
                   <span class="label label-danger">4</span>
                 </a>
               </router-link>
-              <li>
-                <a href="#">
-                  <i class="fa fa-star"></i> Stared
+              <router-link tag="li" :to="{ name: 'starredMessages' }">
+                <a>
+                  <i class="fa fa-star"></i> Starred
                 </a>
-              </li>
-              <li>
-                <a href="#">
+              </router-link>
+              <router-link tag="li" :to="{ name: 'sentMessages' }">
+                <a>
                   <i class="fa fa-rocket"></i> Sent
                 </a>
-              </li>
-              <li>
-                <a href="#">
+              </router-link>
+              <router-link tag="li" :to="{ name: 'trashMessages'}">
+                <a>
                   <i class="fa fa-trash-o"></i> Trash
                 </a>
-              </li>
-              <li>
+              </router-link>
+              <router-link tag="li" :to="{ name: 'importantMessages'}">
                 <a href="#">
                   <i class="fa fa-bookmark"></i> Important
                   <span class="label label-info">5</span>
                 </a>
-              </li>
-              <router-link tag="li" :to="{ name: 'inboxMessages' }">
+              </router-link>
+              <router-link tag="li" :to="{ name: 'spamMessages' }">
                 <a>
                   <i class="fa fa-inbox"></i> Spam
                   <span class="label label-danger">4</span>
                 </a>
               </router-link>
-              <router-link tag="li" :to="{ name: 'inboxMessages' }">
+              <router-link tag="li" :to="{ name: 'draftMessages' }">
                 <a>
                   <i class="fa fa-inbox"></i> Draft
                   <span class="label label-danger">4</span>
                 </a>
               </router-link>
-              <!-- <li class="title">Labels</li>
-              <li>
-                <a href="#">Home
-                  <span class="label label-danger"></span>
-                </a>
-              </li>
-              <li>
-                <a href="#">Job
-                  <span class="label label-info"></span>
-                </a>
-              </li>
-              <li>
-                <a href="#">Clients
-                  <span class="label label-success"></span>
-                </a>
-              </li>
-              <li>
-                <a href="#">News
-                  <span class="label label-warning"></span>
-                </a>
-              </li> -->
             </ul>
           </div>
         </div>
       </div>
-	  <div class="col-md-9">
+	  <div class="col-lg-9">
 		  <router-view></router-view>
 	  </div>
     </div>

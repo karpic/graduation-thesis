@@ -4,6 +4,13 @@ import Compose from './components/messages/Compose.vue';
 import AllMessages from './components/messages/AllMessages.vue';
 import Inbox from './components/messages/Inbox.vue';
 import MessagePreview from './components/messages/MessagePreview.vue';
+import Starred from './components/messages/Starred.vue';
+import Sent from './components/messages/Sent.vue';
+import Trash from './components/messages/Trash.vue';
+import Important from './components/messages/Important.vue';
+import Spam from './components/messages/Spam.vue';
+import Draft from './components/messages/Draft.vue';
+
 
 export const routes = [
     { 
@@ -33,6 +40,54 @@ export const routes = [
                 path: 'inbox',
                 name: 'inboxMessages',
                 component: Inbox,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'starred',
+                name: 'starredMessages',
+                component: Starred,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'sent',
+                name: 'sentMessages',
+                component: Sent,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'trash',
+                name: 'trashMessages',
+                component: Trash,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'important',
+                name: 'importantMessages',
+                component: Important,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'spam',
+                name: 'spamMessages',
+                component: Spam,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'draft',
+                name: 'draftMessages',
+                component: Draft,
                 meta: {
                     requiresAuth: true
                 }

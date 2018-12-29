@@ -2,7 +2,7 @@
      <div>
          <table class="table table-inbox table-hover">
                             <tbody>
-                              <tr class="unread" v-for="message in inboxMessages" @click="openMessage(message.id)">
+                              <tr class="unread" v-for="message in spamMessages" @click="openMessage(message.id)">
                                   <td class="inbox-small-cells">
                                       <input type="checkbox" class="mail-checkbox">
                                   </td>
@@ -24,7 +24,7 @@
         mixins: [mixin],
         computed: {
             ...mapGetters([
-                'inboxMessages'
+                'spamMessages'
             ])
         },
         methods: {
@@ -36,7 +36,7 @@
             }
         },
         created(){
-            this.listMessagesByLabel('INBOX');
+            this.listMessagesByLabel('SPAM');
         }
     }
 </script>
