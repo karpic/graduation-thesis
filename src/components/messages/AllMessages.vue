@@ -1,27 +1,28 @@
 <template>
      <div>
          <table class="table table-inbox table-hover">
-                            <tbody>
-                              <tr class="unread" v-for="message in allMessages">
-                                  <td class="inbox-small-cells">
-                                      <input type="checkbox" class="mail-checkbox">
-                                  </td>
-                                  <td class="inbox-small-cells"><i class="fa fa-star"></i></td>
-                                  <td class="view-message  dont-show">{{ getHeader(message.payload.headers, 'Subject') }}</td>
-                                  <td class="view-message ">{{ message.snippet }}</td>
-                                  <td class="view-message  inbox-small-cells"><i class="fa fa-paperclip"></i></td>
-                                  <td class="view-message  text-right">{{ message.internalDate | date}}</td>
-                              </tr>
-                            </tbody>
+            <thead>
+                <tr>
+                <th scope="col">Subject</th>
+                <th scope="col">Snippet</th>
+                <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <app-message-list-item v-for="message in allMessages" :message="message" :key="message.id"></app-message-list-item>
+            </tbody>
      </table>
-     <button class="btn btn-prymary" @click="logMessages">Log messages</button>
      </div>
 </template>
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import mixin from '../mixins/mixin.js';
+    import MessageListItem from './MessageListItem.vue';
     export default {
+        components: {
+            appMessageListItem: MessageListItem
+        },
         mixins: [mixin],
         computed: {
             ...mapGetters([
