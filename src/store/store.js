@@ -157,6 +157,17 @@ export default new Vuex.Store({
         alertify.success("Successfully sent message");
         router.push({ name: "allMessages" });
       });
+    },
+    deleteMessage(context, messageId) {
+      let gapi = context.getters.gapi;
+      let alertify = context.getters.alertify;
+      let deleteRequest = gapi.client.gmail.messages.delete({
+        userId: 'me',
+        id: messageId
+      });
+      deleteRequest.execute(function(response) {
+        alertify.success('Successfully deleted the message');
+      })
     }
   },
   getters: {

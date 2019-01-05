@@ -11,7 +11,7 @@ const apiConfig = {
   apiKey: 'AIzaSyD-dOyUXQS_9bNDYCCdKiWNwE6YhffsBpg',
   clientId: '239411929608-0okoo5064eo3ul5aucc5qqslksaqhn3t.apps.googleusercontent.com',
   discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"],
-  scope: "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send"
+  scope: "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.modify"
 };
 
 Vue.use(VueGAPI, apiConfig);

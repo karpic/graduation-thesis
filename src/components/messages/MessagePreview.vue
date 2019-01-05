@@ -134,12 +134,19 @@
                     id: messageId
                 });
                 messageRequest.execute(function(resp){
-                    message = resp;   
-                    console.log(message);       
+                    message = resp;     
                     that.decodeMessage(message);
                     that.message = message;
                     that.subject = that.getHeader(message.payload.headers, 'Subject');
                     that.from = that.getHeader(message.payload.headers, 'From');
+                    let modifyRequest = gapi.client.gmail.users.messages.modify({
+                        userId: 'me',
+                        id: message.id,
+                        removeLabelIds: ['UNREAD']
+                    });
+                    modifyRequest.execute(function(respon) {
+                        
+                    });
                 });
             });
         }
