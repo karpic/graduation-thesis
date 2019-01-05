@@ -53,7 +53,7 @@ export default new Vuex.Store({
               vueInstance.$alertify.success(
                 `Successfully logged in as ${googleUser.w3.ig}`
               );
-              context.commit("SET_SIGNED_IN", true);
+              localStorage.setItem('user', JSON.stringify(googleUser));
               context.commit("SET_GAPI_INSTANCE", gapi);
               context.commit("SET_ALERTIFY_INSTANCE", vueInstance.$alertify);
               gapi.client.gmail.users.labels
@@ -74,7 +74,7 @@ export default new Vuex.Store({
       let alertify = context.getters.alertify;
       vueInstance.$logout();
       alertify.success('Successfully signed out');
-      context.commit('SET_SIGNED_IN', false);
+      localStorage.removeItem('user');
       router.push('/signin');
     },
     listAllMessages(context) {

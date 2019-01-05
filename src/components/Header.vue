@@ -39,7 +39,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["allLabels", "isSignedIn"])
+    ...mapGetters(["allLabels"]),
+    isSignedIn() {
+      return localStorage.getItem('user');
+    }
   }
 };
 </script>

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router';
 import { routes } from './routes';
-import store from './store/store';
 
 Vue.use(VueRouter);
 
@@ -10,19 +9,15 @@ export const router = new VueRouter({
     routes
   });
   
-  router.beforeEach((to, from, next) => { 
-    let signedIn = store.getters.isSignedIn;
-    if (to.matched.some(record => record.meta.requiresAuth)) { 
-        if (!signedIn) { 
-            next({ 
-                path: '/signin', 
-                query: { redirect: to.fullPath } 
-            }) 
-        } else { 
-            next();
-        } 
-    } else { 
-        next();
-    } 
-  });
+router.beforeEach((to, from, next) => { 
+    const publicPages = ['/signin'];
+    const authRequired = !publicPages.includes(to.path);
+    const loggedIn = localStorage.getItem('user');
 
+    if(authRequired && !loggedIn) {
+        next('/signin');
+    }
+
+    next();
+});
+ 
