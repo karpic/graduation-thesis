@@ -54,14 +54,24 @@ export default new Vuex.Store({
                 `Successfully logged in as ${googleUser.w3.ig}`
               );
               localStorage.setItem('user', JSON.stringify(googleUser));
-              context.commit("SET_GAPI_INSTANCE", gapi);
-              context.commit("SET_ALERTIFY_INSTANCE", vueInstance.$alertify);
+              context.commit('SET_SIGNED_IN', true);
+              context.commit('SET_GAPI_INSTANCE', gapi);
+              context.commit('SET_ALERTIFY_INSTANCE', vueInstance.$alertify);
               gapi.client.gmail.users.labels
                 .list({
                   userId: "me"
                 })
                 .then(function(response) {
-                  var labels = response.result.labels;
+                  var labels = [];
+                  
+                  for(let label of response.result.labels) {
+                    gapi.client.gmail.users.labels.get({
+                      userId: 'me',
+                      id: label.id
+                    }).then(function(labelResponse) {
+                      labels.push(labelResponse.result);
+                    })
+                  }
                   console.log(labels);
                   context.commit("SET_LABELS", labels);
                 });
@@ -75,6 +85,7 @@ export default new Vuex.Store({
       vueInstance.$logout();
       alertify.success('Successfully signed out');
       localStorage.removeItem('user');
+      context.commit('SET_SIGNED_IN', false);
       router.push('/signin');
     },
     listAllMessages(context) {

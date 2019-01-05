@@ -26,6 +26,15 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
+  data() {
+    return {
+      user: {},
+      signedIn: false
+    }
+  },
+  created() {
+    
+  },
   methods: {
     ...mapActions(['signIn', 'signOut']),
     listLabels() {
@@ -39,10 +48,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["allLabels"]),
-    isSignedIn() {
-      return localStorage.getItem('user');
-    }
+    ...mapGetters(['allLabels', 'isSignedIn']),
   }
 };
 </script>

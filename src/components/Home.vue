@@ -8,53 +8,56 @@
             <ul>
 			        <router-link tag="li" :to="{ name: 'allMessages' }">
                 <a>
-                  <i class="fa fa-inbox"></i> All mail
+                  <i class="fa fa-inbox"></i><span class="glyphicon glyphicon-envelope"></span> All mail
                   <span class="label label-danger">4</span>
                 </a>
               </router-link>
               <router-link tag="li" :to="{ name: 'inboxMessages' }">
                 <a>
-                  <i class="fa fa-inbox"></i> Unread
-                  <span class="label label-danger">4</span>
+                  <i class="fa fa-inbox"></i><span class="glyphicon glyphicon-check"></span> Unread
+                  <span class="label label-default">{{ getUnreadCountForLabel(allLabels, 'UNREAD')}}</span>
                 </a>
               </router-link>
               <router-link tag="li" :to="{ name: 'inboxMessages' }">
                 <a>
-                  <i class="fa fa-inbox"></i> Inbox
-                  <span class="label label-danger">4</span>
+                  <i class="fa fa-inbox"></i><span class="glyphicon glyphicon-inbox"></span> Inbox
+                  <span class="label label-danger">{{ getUnreadCountForLabel(allLabels, 'INBOX')}}</span>
                 </a>
               </router-link>
               <router-link tag="li" :to="{ name: 'starredMessages' }">
                 <a>
-                  <i class="fa fa-star"></i> Starred
+                  <i class="fa fa-star"></i><span class="glyphicon glyphicon-star"></span>  Starred
+                  <span class="label label-default">{{ getUnreadCountForLabel(allLabels, 'STARRED')}}</span>
                 </a>
               </router-link>
               <router-link tag="li" :to="{ name: 'sentMessages' }">
                 <a>
-                  <i class="fa fa-rocket"></i> Sent
+                  <i class="fa fa-rocket"></i><span class="glyphicon glyphicon-send"></span>  Sent
+                  <span class="label label-default">{{ getUnreadCountForLabel(allLabels, 'SENT')}}</span>
                 </a>
               </router-link>
               <router-link tag="li" :to="{ name: 'trashMessages'}">
                 <a>
-                  <i class="fa fa-trash-o"></i> Trash
+                  <i class="fa fa-trash-o"></i><span class="glyphicon glyphicon-trash"></span>  Trash
+                  <span class="label label-default">{{ getUnreadCountForLabel(allLabels, 'TRASH')}}</span>
                 </a>
               </router-link>
               <router-link tag="li" :to="{ name: 'importantMessages'}">
                 <a href="#">
-                  <i class="fa fa-bookmark"></i> Important
-                  <span class="label label-info">5</span>
+                  <i class="fa fa-bookmark"></i><span class="glyphicon glyphicon-bullhorn"></span>  Important
+                  <span class="label label-default">{{ getUnreadCountForLabel(allLabels, 'IMPORTANT')}}</span>
                 </a>
               </router-link>
               <router-link tag="li" :to="{ name: 'spamMessages' }">
                 <a>
-                  <i class="fa fa-inbox"></i> Spam
-                  <span class="label label-danger">4</span>
+                  <i class="fa fa-inbox"></i><span class="glyphicon glyphicon-exclamation-sign"></span>  Spam
+                  <span class="label label-default">{{ getUnreadCountForLabel(allLabels, 'SPAM')}}</span>
                 </a>
               </router-link>
               <router-link tag="li" :to="{ name: 'draftMessages' }">
                 <a>
-                  <i class="fa fa-inbox"></i> Draft
-                  <span class="label label-danger">4</span>
+                  <i class="fa fa-inbox"></i><span class="glyphicon glyphicon-time"></span> Draft
+                  <span class="label label-default">{{ getUnreadCountForLabel(allLabels, 'DRAFT')}}</span>
                 </a>
               </router-link>
             </ul>
@@ -69,22 +72,29 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+  import { mapActions, mapGetters } from "vuex";
 
-import Header from "./Header.vue";
-import SignIn from "./SignIn.vue";
-export default {
-  components: {
-    appHeader: Header,
-    appSignIn: SignIn
-  },
-  methods: {
-    ...mapActions(["listAllMessages"]),
-    list() {
-      this.listAllMessages(this);
+  import Header from "./Header.vue";
+  import SignIn from "./SignIn.vue";
+  import mixin from '../components/mixins/mixin.js';
+  export default {
+    mixins: [mixin],
+    components: {
+      appHeader: Header,
+      appSignIn: SignIn
+    },
+    methods: {
+      ...mapActions(["listAllMessages"]),
+      list() {
+        this.listAllMessages(this);
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'allLabels'
+      ])
     }
-  }
-};
+  };
 </script>
 
 <style scoped>

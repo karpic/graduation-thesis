@@ -8,6 +8,15 @@ var mixin = {
                 }
             }
             return header;
+        },
+        getUnreadCountForLabel(labels, labelName) {
+            let unreadMessageCount;
+            for(let i = 0; i < labels.length; i++){
+                if(labels[i].name.toLowerCase() === labelName.toLowerCase()){
+                    unreadMessageCount = labels[i].messagesUnread;
+                }
+            }
+            return unreadMessageCount;
         }
     }
 };
