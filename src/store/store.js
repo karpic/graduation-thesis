@@ -75,7 +75,7 @@ export default new Vuex.Store({
                   console.log(labels);
                   context.commit("SET_LABELS", labels);
                 });
-              vueInstance.$router.push({ path: "home" });
+              vueInstance.$router.push({ name: 'allMessages' });
             });
         });
       }

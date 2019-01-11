@@ -3,17 +3,38 @@
     <br><br><br><br>
     <div class="text-center">
         <div class="row">
-            <img src="../assets/signinImage.jpg" width="500" height="300" style="border-radius: 2em;">
+            <div class="col-md-6">
+                <img src="../assets/logo.png" style="border-radius: 2em;">
+            </div>
+            <div class="col-md-6">
+                <h3><br>Welcome to Mailer. Gmail clone made with VueJS <br> as part of Graduation thesis.</h3>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <h3><br>Author: Arsenije Karpic <br> Faculty of Technical Sciences, Novi Sad</h3>
+                <ul class="social-icons">
+                    <li><a href="https://github.com/karpic"><img src="../assets/Github.png" alt="Github logo"></a></li>
+                    <li><a href="https://www.linkedin.com/in/arsenije-karpi%C4%87-a0905516a/"><img src="../assets/Linkedin.png" alt="Linkedin logo"></a></li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <img src="../assets/author.jpg" alt="Author" style="width: 200px; height: 200px; border-radius: 7em;">
+            </div>
         </div>
         <br><br>
+        <hr>
         <div class="row">
-            <h2>Welcome to Mailer</h2>
-            <h3>A Gmail clone made with VueJS</h3>
-        </div>
-        <div class="row">
-            <button class="loginBtn loginBtn--google" @click="login">
-                Login with Google
-            </button>
+            <div class="col-md-6">
+                <h3>To continue using the app, login with Google.</h3>
+            </div>
+            <div class="col-md-6">
+                <br>
+                <button class="loginBtn loginBtn--google" @click="login">
+                    Login with Google
+                </button>
+            </div>
         </div>
     </div>
   </div>
@@ -82,5 +103,22 @@
     .loginBtn--google:hover,
     .loginBtn--google:focus {
         background: #e74b37;
+    }
+    .social-icons {
+        text-align: center;
+    }  
+    .social-icons li {
+        display:inline-block;
+        list-style-type:none;
+        -webkit-user-select:none;
+        -moz-user-select:none;
+    }
+    .social-icons li a {
+        border-bottom: none;
+    }
+    .social-icons li img {
+        width:70px;
+        height:70px;
+        margin-right: 20px;
     }
 </style>
