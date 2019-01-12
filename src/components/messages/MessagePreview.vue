@@ -13,9 +13,8 @@
                         <h3 class="lead no-margin">{{ subject }}</h3>
                     </div>
                     <div class="pull-right">
-                        <button class="btn btn-info btn-sm tooltips" data-container="body" data-original-title="Print" type="button" data-toggle="tooltip" data-placement="top" title=""><i class="fa fa-print"></i> </button>
-                        <button class="btn btn-danger btn-sm tooltips" data-container="body" data-original-title="Trash" data-toggle="tooltip" data-placement="top" title=""><i class="fa fa-trash-o"></i></button>
                         <a href="#mail-compose.html" class="btn btn-success btn-sm"><i class="fa fa-reply"></i> Reply</a>
+                        <button class="glyphicon glyphicon-trash" @click.prevent="deleteEmail"></button>
                     </div>
                     <div class="clearfix"></div>
                 </div><!-- /.panel-sub-heading -->
@@ -38,18 +37,28 @@
                 </div><!-- /.panel-body -->
                 <div class="panel-footer">
                     <div class="pull-right">
-                        <a href="#mail-compose.html" class="btn btn-success btn-sm" @click="toggleReplyClicked"><i class="fa fa-reply"></i> Reply</a>
-                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-arrow-right"></i> Forward</button>
-                        <button class="btn btn-info btn-sm tooltips" data-container="body" data-original-title="Print" type="button" data-toggle="tooltip" data-placement="top" title=""><i class="fa fa-print"></i> </button>
-                        <button class="btn btn-danger btn-sm tooltips" data-container="body" data-original-title="Trash" data-toggle="tooltip" data-placement="top" title=""><i class="fa fa-trash-o"></i></button>
+                        <a class="btn btn-success btn-sm" @click="toggleReplyClicked"><i class="fa fa-reply"></i> Reply</a>
+                        <a class="btn btn-primary btn-sm" @click="toggleForwardClicked"><i class="glyphicon glyphicon-share-alt"></i> Forward</a>
                     </div>
                     <div class="clearfix"></div>
                 </div><!-- /.panel-footer -->
             </div><!-- /.panel -->
         </form>
         <div v-if="replyClicked">
-            <textarea name="replyContent" id="replyContent" cols="120" rows="10" placeholder="Type your reply here" v-model="replyMessage"></textarea>
+            <textarea name="replyContent" id="replyContent" cols="120" rows="10" placeholder="Type your reply here" v-model="replyMessage" class="form-control"></textarea>
             <button class="btn btn-success" @click="sendReply">Send</button>
+        </div>
+
+        <div v-if="forwardClicked">
+            <div class="form-group">
+				    	<label for="to" class="col-sm-1 control-label">To:</label>
+				    	<div class="col-sm-11">
+                              <input type="email" class="form-control select2-offscreen" id="to" placeholder="Type email" tabindex="-1" v-model="forwardTo">
+				    	</div>
+            </div>
+            <br><hr>
+            <textarea name="forwardContent" id="forwardContent" cols="120" rows="10" v-model="forwardMessage" class="form-control"></textarea>
+            <button class="btn btn-success" @click="sendForward">Send</button>
         </div>
     </div>
 </template>
@@ -65,14 +74,18 @@
                 message: {},
                 decodedMessage: '',
                 replyClicked: false,
+                forwardClicked: false,
                 replyMessage: '',
+                forwardMessage: '',
                 subject: '',
-                from: ''
+                from: '',
+                forwardTo: ''
             }
         },
         methods: {
             ...mapActions([
-                'sendMessage'
+                'sendMessage',
+                'deleteMessage'
             ]),
             decodeMessage(messageToDecode) {
                 
@@ -109,18 +122,38 @@
                 this.decodedMessage = getBody(messageToDecode.payload);
                 
             },
+            deleteEmail() {
+                this.deleteMessage(this.message.id);
+            },
             toggleReplyClicked() {
+                this.forwardClicked = false;
                 this.replyClicked = !this.replyClicked;
+            },
+            toggleForwardClicked() {
+                this.replyClicked = false;
+                this.forwardClicked = !this.forwardClicked;
+                this.forwardMessage = 
+                        `\n\n----Forwarded message --- \nFrom: ${this.getHeader(this.message.payload.headers, 'From')} \nSubject: ${this.getHeader(this.message.payload.headers, 'Subject')}\nTo: ${this.getHeader(this.message.payload.headers, 'To')} \n-------------------------`
             },
             sendReply() {
                 let headers = {
                     'To': this.getHeader(this.message.payload.headers, 'Return-Path'),
                     'In-Reply-To': this.message.id
-                }
-                console.log(headers);
+                };
                 this.sendMessage({
                     headers,
                     message: this.replyMessage
+                });
+            },
+            sendForward() {
+                let headers = {
+                    'To': this.forwardTo,
+                    'Subject': this.getHeader(this.message.payload.headers, 'Subject')
+                };
+                console.log(headers);
+                this.sendMessage({
+                    headers,
+                    message: this.forwardMessage
                 });
             }
         },

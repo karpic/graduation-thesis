@@ -2,12 +2,13 @@
     <tr  @click="openMessage(message.id)" :class="{ boldedClass: isUnread }">
       <td>{{ getHeader(message.payload.headers, 'Subject') }}</td>
       <td>{{ message.snippet }}</td>
-      <td>{{ message.internalDate | date}}</td>
+      <td>{{ message.internalDate | date}}</td> 
     </tr>
 </template>
 
 <script>
     import mixin from '../mixins/mixin.js';
+    import { mapActions } from 'vuex';
     export default {
         data() {
             return {
@@ -17,6 +18,9 @@
         mixins: [mixin],
         props: ['message'],
         methods: {
+            ...mapActions([
+                'deleteMessage'
+            ]),
             openMessage(messageId) {
                 this.$router.push({ name: 'messagePreview', params: { id: messageId }});
             }

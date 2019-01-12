@@ -36,8 +36,8 @@
 					
 					<div class="form-group">	
 						<button type="submit" class="btn btn-success" @click="sendEmail">Send</button>
-						<button type="submit" class="btn btn-default">Draft</button>
-						<button type="submit" class="btn btn-danger">Discard</button>
+						<button type="submit" class="btn btn-default" @click="saveDraft">Draft</button>
+						<button type="submit" class="btn btn-danger" @click="navigateDiscard">Discard</button>
 					</div>
 				</div>	
 			</div>	
@@ -57,7 +57,8 @@
         },
         methods: {
             ...mapActions([
-                'sendMessage'
+				'sendMessage',
+				'saveAsDraft'
             ]),
             sendEmail() {
                 let headers = {
@@ -68,7 +69,22 @@
                     headers, 
                     message: this.messageText
                 });
-            }
+			},
+			saveDraft() {
+				let headers = {
+                    'To': this.to,
+                    'Subject': this.subject
+				};
+				this.saveAsDraft({
+					headers,
+					message: this.messageText
+				});
+			},
+			navigateDiscard() {
+				if(confirm('Are you sure you want to discard this message?')){
+					this.$router.go(-1);
+				}
+			}
         }
     }
 </script>

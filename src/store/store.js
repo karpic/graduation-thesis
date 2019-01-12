@@ -143,7 +143,6 @@ export default new Vuex.Store({
       for (var header in headers)
         email += header += ": " + headers[header] + "\r\n";
       email += "\r\n" + message;
-      console.log(email);
       var sendRequest = gapi.client.gmail.users.messages.send({
         userId: "me",
         resource: {
@@ -154,20 +153,46 @@ export default new Vuex.Store({
         }
       });
       sendRequest.execute(function(resp) {
-        alertify.success("Successfully sent message");
-        router.push({ name: "allMessages" });
+        alertify.success('Successfully sent message!');
+        router.push({ name: 'allMessages' });
       });
     },
-    deleteMessage(context, messageId) {
+    saveAsDraft(context, { headers, message }) {
       let gapi = context.getters.gapi;
       let alertify = context.getters.alertify;
-      let deleteRequest = gapi.client.gmail.messages.delete({
+      var email = "";
+      for (var header in headers)
+        email += header += ": " + headers[header] + "\r\n";
+      email += "\r\n" + message;
+      var draftRequest = gapi.client.gmail.users.drafts.create({
+        userId: "me",
+        resource: {
+          message: {
+            raw: window
+              .btoa(email)
+              .replace(/\+/g, "-")
+              .replace(/\//g, "_")
+          }
+        }
+      });
+      draftRequest.execute(function(resp) {
+        console.log(resp);
+        alertify.success('Successfully created a draft message!');
+        router.push({ name: 'allMessages' });
+      })
+    },
+    deleteMessage(context, messageId) {
+      console.log(messageId);
+      let gapi = context.getters.gapi;
+      let alertify = context.getters.alertify;
+      let deleteRequest = gapi.client.gmail.users.messages.delete({
         userId: 'me',
         id: messageId
       });
       deleteRequest.execute(function(response) {
         alertify.success('Successfully deleted the message');
-      })
+        router.go(-1);
+      });
     }
   },
   getters: {
