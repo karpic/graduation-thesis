@@ -35,6 +35,9 @@
                         <div v-html="decodedMessage"></div>
                     </div><!-- /.view-mail -->
                 </div><!-- /.panel-body -->
+                <div id="attachmentDownloadLinks">
+                    <h4>Attachments: </h4>
+                </div>
                 <div class="panel-footer">
                     <div class="pull-right">
                         <a class="btn btn-success btn-sm" @click="toggleReplyClicked"><i class="fa fa-reply"></i> Reply</a>
@@ -133,7 +136,7 @@
                 this.replyClicked = false;
                 this.forwardClicked = !this.forwardClicked;
                 this.forwardMessage = 
-                        `\n\n----Forwarded message --- \nFrom: ${this.getHeader(this.message.payload.headers, 'From')} \nSubject: ${this.getHeader(this.message.payload.headers, 'Subject')}\nTo: ${this.getHeader(this.message.payload.headers, 'To')} \n-------------------------`
+                        `\n\n----Forwarded message --- \nFrom: ${this.getHeader(this.message.payload.headers, 'From')} \nSubject: ${this.getHeader(this.message.payload.headers, 'Subject')}\nTo: ${this.getHeader(this.message.payload.headers, 'To')} \n------------------------- \n ${this.decodedMessage}`
             },
             sendReply() {
                 let headers = {
@@ -180,6 +183,34 @@
                     modifyRequest.execute(function(respon) {
                         
                     });
+
+                    //handle Attachments
+                    let parts = message.payload.parts;
+                    for (var i = 0; i < parts.length; i++) {
+                        var part = parts[i];
+                        if (part.filename && part.filename.length > 0) {
+                        var attachId = part.body.attachmentId;
+                        var request = gapi.client.gmail.users.messages.attachments.get({
+                            'id': attachId,
+                            'messageId': message.id,
+                            'userId': 'me'
+                        });
+                        request.execute(function(attachment) {
+                            let dataBase64Rep = attachment.data.replace(/-/g, '+').replace(/_/g, '/');
+                            let urlBlob = that.b64toBlob(dataBase64Rep, part.mimeType, attachment.size);
+                            
+                            let linkContainer = document.getElementById('attachmentDownloadLinks');
+                            let dlTag = document.createElement('a');
+                            let linkText = document.createTextNode(part.filename);
+                            dlTag.appendChild(linkText);
+                            dlTag.href = urlBlob;
+                            dlTag.download = part.filename;
+                            linkContainer.appendChild(dlTag);
+                            linkContainer.appendChild(document.createElement('br'));
+                            //URL.revokeObjectURL(urlBlob);
+                        });
+                        }
+                    }
                 });
             });
         }
