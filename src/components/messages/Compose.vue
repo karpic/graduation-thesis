@@ -33,7 +33,14 @@
 					<div class="form-group">
 						<textarea class="form-control" id="message" name="body" rows="12" placeholder="Click here to reply" v-model="messageText"></textarea>
 					</div>
-					
+
+					<div>
+						<div class="form-group">
+							<label for="files">Attachments: </label>
+							<input type="file" name="files" id="files" class="form-control" multiple>
+						</div>
+					</div>
+					<hr>
 					<div class="form-group">	
 						<button type="submit" class="btn btn-success" @click="sendEmail">Send</button>
 						<button type="submit" class="btn btn-default" @click="saveDraft">Draft</button>
@@ -52,23 +59,34 @@
             return {
                 to: '',
                 subject: '',
-                messageText: ''
+				messageText: '',
+				sendMessagesWithAttachments: false,
+				attachmentFiles: []
             }
         },
         methods: {
             ...mapActions([
 				'sendMessage',
-				'saveAsDraft'
+				'saveAsDraft',
+				'sendMessageWithAttachments'
             ]),
             sendEmail() {
-                let headers = {
+				var headers = {
                     'To': this.to,
                     'Subject': this.subject
-                };
-                this.sendMessage({
-                    headers, 
-                    message: this.messageText
-                });
+					};
+                if(!this.sendMessagesWithAttachments){
+					this.sendMessage({
+						headers, 
+						message: this.messageText
+					});
+				}else {
+					this.sendMessageWithAttachments({
+						gapiHaders: headers,
+						messageText: this.messageText,
+						files: this.attachmentFiles}
+					);
+				}
 			},
 			saveDraft() {
 				let headers = {
@@ -84,8 +102,38 @@
 				if(confirm('Are you sure you want to discard this message?')){
 					this.$router.go(-1);
 				}
+			},
+			handleFileSelection(event) {
+				let filesTidy = [];
+				function getBase64(file) {
+					return new Promise((resolve, reject) => {
+						const reader = new FileReader();
+						reader.readAsBinaryString(file);
+						reader.onload = () => resolve(reader.result);
+						reader.onerror = error => reject(error);
+					});
+				};
+				this.sendMessagesWithAttachments = true;
+				let files = event.target.files;
+				for (let i = 0, f; f = files[i]; i++){
+					getBase64(files[0]).then(function(data) {
+						addToFilesArray(files[0].type, files[0].name, data);
+					})
+				};
+				function addToFilesArray(type, name, data) {
+					filesTidy.push({
+						type,
+						name,
+						data: window.btoa(data)
+					});
+				}
+				this.attachmentFiles = filesTidy;
 			}
-        }
+		},
+		mounted() {
+			let inputFilesTag = document.getElementById('files');
+			inputFilesTag.addEventListener('change', this.handleFileSelection, false);
+		}
     }
 </script>
 

@@ -11,6 +11,7 @@
     "axios": "^0.18.0",
     "babel-preset-stage-2": "^6.24.1",
     "bootstrap": "^3.3.7",
+    "gmail-api-create-message-body": "^1.0.0",
     "vue": "^2.0.1",
     "vue-alertify": "^1.1.0",
     "vue-gapi": "0.0.10",

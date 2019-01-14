@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { router } from '../router';
+import createBody from 'gmail-api-create-message-body';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -50,6 +52,7 @@ export default new Vuex.Store({
             .getAuthInstance()
             .signIn()
             .then(googleUser => {
+              localStorage.setItem('token', googleUser.Zi.access_token);
               vueInstance.$alertify.success(
                 `Successfully logged in as ${googleUser.w3.ig}`
               );
@@ -85,6 +88,7 @@ export default new Vuex.Store({
       vueInstance.$logout();
       alertify.success('Successfully signed out');
       localStorage.removeItem('user');
+      localStorage.removeItem('token');
       context.commit('SET_SIGNED_IN', false);
       router.push('/signin');
     },
@@ -156,6 +160,28 @@ export default new Vuex.Store({
         alertify.success('Successfully sent message!');
         router.push({ name: 'allMessages' });
       });
+    },
+    sendMessageWithAttachments(context, { gapiHeaders, messageText, files }) {
+      let body = createBody({
+        headers: gapiHeaders,
+        textHtml: messageText,
+        textPlain: messageText, 
+        attachments: files
+      });
+      console.log(body);
+      let token = localStorage.getItem('token');
+      let headers = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/related; boundary="foo_bar_baz"'
+      };
+
+      axios.post('https://www.googleapis.com/upload/gmail/v1/users/me/messages/send', body, {headers: headers})
+            .then(function(response){
+              console.log(response);
+            })
+            .catch(function(error){
+              console.log(error);
+            });
     },
     saveAsDraft(context, { headers, message }) {
       let gapi = context.getters.gapi;
