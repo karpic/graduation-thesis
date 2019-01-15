@@ -12,7 +12,7 @@
                   <span class="label label-danger">4</span>
                 </a>
               </router-link>
-              <router-link tag="li" :to="{ name: 'inboxMessages' }">
+              <router-link tag="li" :to="{ name: 'unreadMessages' }">
                 <a>
                   <i class="fa fa-inbox"></i><span class="glyphicon glyphicon-check"></span> Unread
                   <span class="label label-default">{{ getUnreadCountForLabel(allLabels, 'UNREAD')}}</span>

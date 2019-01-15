@@ -175,7 +175,7 @@ export default new Vuex.Store({
         'Content-Type': 'multipart/related; boundary="foo_bar_baz"'
       };
 
-      axios.post('https://www.googleapis.com/upload/gmail/v1/users/me/messages/send', body, {headers: headers})
+      axios.post('https://www.googleapis.com/upload/gmail/v1/users/me/messages/send?uploadType=media', body, {headers: headers})
             .then(function(response){
               console.log(response);
             })

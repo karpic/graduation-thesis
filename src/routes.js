@@ -10,7 +10,7 @@ import Trash from './components/messages/Trash.vue';
 import Important from './components/messages/Important.vue';
 import Spam from './components/messages/Spam.vue';
 import Draft from './components/messages/Draft.vue';
-
+import Unread from './components/messages/Unread.vue';
 
 export const routes = [
     { 
@@ -40,6 +40,14 @@ export const routes = [
                 path: 'inbox',
                 name: 'inboxMessages',
                 component: Inbox,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'unread',
+                name: 'unreadMessages',
+                component: Unread,
                 meta: {
                     requiresAuth: true
                 }

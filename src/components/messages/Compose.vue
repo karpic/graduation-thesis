@@ -10,12 +10,12 @@
                               <input type="email" class="form-control select2-offscreen" id="to" placeholder="Type email" tabindex="-1" v-model="to">
 				    	</div>
 				  	</div>
-					<div class="form-group">
+					<!-- <div class="form-group">
 				    	<label for="cc" class="col-sm-1 control-label">CC:</label>
 				    	<div class="col-sm-11">
                               <input type="email" class="form-control select2-offscreen" id="cc" placeholder="Type email" tabindex="-1">
 				    	</div>
-				  	</div>
+				  	</div> -->
 					<div class="form-group">
 				    	<label for="bcc" class="col-sm-1 control-label">Subject:</label>
 				    	<div class="col-sm-11">
