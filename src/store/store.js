@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { router } from '../router';
-import createBody from 'gmail-api-create-message-body';
 import axios from 'axios';
 
 Vue.use(Vuex);
@@ -12,6 +11,7 @@ export default new Vuex.Store({
     alertify: {},
     labels: [],
     allMessages: [],
+    searchedMessages: [],
     messagesByLabel: {
       'SENT': [],
       'INBOX': [],
@@ -45,6 +45,10 @@ export default new Vuex.Store({
     SET_MESSAGES_BY_LABEL(state, payload) {
       state.messagesByLabel[payload.label] = payload.messages;
     },
+    SET_SEARCHED_MESSAGES(state, payload) {
+      state.searchedMessages = payload;
+    }
+    ,
     SET_USERNAME(state, payload) {
       state.username = payload;
     },
@@ -150,6 +154,28 @@ export default new Vuex.Store({
         context.commit('SET_MESSAGES_BY_LABEL', { label: label, messages: messages });
       });
     },
+    searchMessages(context, query) {
+      let gapi = context.getters.gapi;
+      let request;
+      let searchResult = [];
+      request = gapi.client.gmail.users.messages.list({
+        userId: "me",
+        maxResults: 10,
+        q: query
+      });
+      request.execute(function(response) {
+        for (let message of response.messages) {
+          var messageRequest = gapi.client.gmail.users.messages.get({
+            userId: 'me',
+            id: message.id
+          });
+          messageRequest.execute(function(resp) {
+            searchResult.push(resp);
+          });
+        }
+        context.commit('SET_SEARCHED_MESSAGES', searchResult);
+      });
+    },
     sendMessage(context, { headers, message }) {
       let gapi = context.getters.gapi;
       let alertify = context.getters.alertify;
@@ -172,7 +198,7 @@ export default new Vuex.Store({
       });
     },
     sendMessageWithAttachments(context, { gapiHeaders, messageText, files }) {
-      let body = createBody({
+      /* let body = createBody({
         headers: gapiHeaders,
         textHtml: messageText,
         textPlain: messageText, 
@@ -191,7 +217,7 @@ export default new Vuex.Store({
             })
             .catch(function(error){
               console.log(error);
-            });
+            }); */
     },
     saveAsDraft(context, { headers, message }) {
       let gapi = context.getters.gapi;
@@ -270,6 +296,9 @@ export default new Vuex.Store({
     },
     importantMessages: state => {
       return state.messagesByLabel['IMPORTANT'];
+    },
+    searchedMessages: state => {
+      return state.searchedMessages;
     },
     username: state => {
       return state.username;

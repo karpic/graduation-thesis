@@ -9,11 +9,15 @@
           <a>Mail</a>
         </router-link>
       </ul>
+      <form class="navbar-form navbar-left" v-if="isSignedIn">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" v-model="query">
+        </div>
+        <button class="btn btn-default" @click.prevent="handleSearch">Submit</button>
+      </form>
       <ul class="nav navbar-nav navbar-right">
         <li v-if="!isSignedIn">
-          <button class="loginBtn loginBtn--google" @click="login">
-                Login with Google
-          </button>
+          <button class="loginBtn loginBtn--google" @click="login">Login with Google</button>
         </li>
         <li v-if="isSignedIn">
           <a>{{ username }} ( {{ emailAddress }} )</a>
@@ -32,14 +36,15 @@ export default {
   data() {
     return {
       user: {},
-      signedIn: false
+      signedIn: false,
+      query: ''
     }
   },
   created() {
     
   },
   methods: {
-    ...mapActions(['signIn', 'signOut']),
+    ...mapActions(['signIn', 'signOut', 'searchMessages']),
     listLabels() {
       console.log(this.allLabels);
     },
@@ -48,6 +53,10 @@ export default {
     },
     login() {
       this.signIn(this);
+    },
+    handleSearch() {
+      this.searchMessages(this.query);
+      this.$router.push({ name: 'searchedMessages'});
     }
   },
   computed: {

@@ -13,12 +13,10 @@
     "babel-preset-stage-2": "^6.24.1",
     "bootstrap": "^3.3.7",
     "express": "^4.16.4",
-    "gmail-api-create-message-body": "^1.0.0",
     "vue": "^2.0.1",
     "vue-alertify": "^1.1.0",
     "vue-gapi": "0.0.10",
     "vue-router": "^3.0.2",
-    "vue-toastr": "^2.0.16",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -33,3 +31,5 @@
     "webpack-dev-server": "2.1.0-beta.0"
   }
 }
+
+

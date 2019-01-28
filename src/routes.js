@@ -11,6 +11,7 @@ import Important from './components/messages/Important.vue';
 import Spam from './components/messages/Spam.vue';
 import Draft from './components/messages/Draft.vue';
 import Unread from './components/messages/Unread.vue';
+import SearchedMessages from './components/messages/SearchMessages.vue';
 
 export const routes = [
     { 
@@ -96,6 +97,14 @@ export const routes = [
                 path: 'draft',
                 name: 'draftMessages',
                 component: Draft,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'search',
+                name: 'searchedMessages',
+                component: SearchedMessages,
                 meta: {
                     requiresAuth: true
                 }
