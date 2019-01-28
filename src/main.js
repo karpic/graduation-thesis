@@ -20,9 +20,9 @@ Vue.use(VueAlertify);
 Vue.filter('date', DateFilter);
 
 new Vue({
+  router,
   el: '#app',
   render: h => h(App),
-  router,
   store,
   created() {
     let signedIn;

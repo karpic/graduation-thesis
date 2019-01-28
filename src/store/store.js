@@ -22,7 +22,9 @@ export default new Vuex.Store({
       'IMPORTANT': [],
       'STARRED': [],
     },
-    isSignedIn: false
+    isSignedIn: false,
+    username: '',
+    emailAddress: ''
   },
   mutations: {
     SET_GAPI_INSTANCE(state, payload) {
@@ -42,6 +44,12 @@ export default new Vuex.Store({
     },
     SET_MESSAGES_BY_LABEL(state, payload) {
       state.messagesByLabel[payload.label] = payload.messages;
+    },
+    SET_USERNAME(state, payload) {
+      state.username = payload;
+    },
+    SET_EMAIL(state, payload) {
+      state.emailAddress = payload;
     }
   },
   actions: {
@@ -52,6 +60,8 @@ export default new Vuex.Store({
             .getAuthInstance()
             .signIn()
             .then(googleUser => {
+              context.commit('SET_USERNAME', googleUser.w3.ig);
+              context.commit('SET_EMAIL', googleUser.w3.U3);
               localStorage.setItem('token', googleUser.Zi.access_token);
               vueInstance.$alertify.success(
                 `Successfully logged in as ${googleUser.w3.ig}`
@@ -260,6 +270,12 @@ export default new Vuex.Store({
     },
     importantMessages: state => {
       return state.messagesByLabel['IMPORTANT'];
+    },
+    username: state => {
+      return state.username;
+    },
+    emailAddress: state => {
+      return state.emailAddress;
     }
   }
 });

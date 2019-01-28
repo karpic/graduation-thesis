@@ -2,7 +2,7 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <router-link to="/"><a class="navbar-brand"></a>Mailer</a></router-link>
+        <router-link to="/"><a class="navbar navbar-brand">Mailer</a></router-link>
       </div>
       <ul class="nav navbar-nav">
         <router-link tag="li" to="/home" v-if="isSignedIn">
@@ -14,6 +14,9 @@
           <button class="loginBtn loginBtn--google" @click="login">
                 Login with Google
           </button>
+        </li>
+        <li v-if="isSignedIn">
+          <a>{{ username }} ( {{ emailAddress }} )</a>
         </li>
         <li v-if="isSignedIn">
           <a @click="logout">Log out</a>
@@ -48,7 +51,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['allLabels', 'isSignedIn']),
+    ...mapGetters(['allLabels', 
+                  'isSignedIn', 
+                  'username',
+                  'emailAddress']),
   }
 };
 </script>

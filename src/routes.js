@@ -116,5 +116,12 @@ export const routes = [
         meta: {
             requiresAuth: false
         }
+    },
+    {
+        path: '/',
+        component: SignIn,
+        meta: {
+            requiresAuth: false
+        }
     }
 ]
