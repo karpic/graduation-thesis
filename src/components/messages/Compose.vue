@@ -10,30 +10,18 @@
                               <input type="email" class="form-control select2-offscreen" id="to" placeholder="Type email" tabindex="-1" v-model="to">
 				    	</div>
 				  	</div>
-					<!-- <div class="form-group">
-				    	<label for="cc" class="col-sm-1 control-label">CC:</label>
-				    	<div class="col-sm-11">
-                              <input type="email" class="form-control select2-offscreen" id="cc" placeholder="Type email" tabindex="-1">
-				    	</div>
-				  	</div> -->
 					<div class="form-group">
 				    	<label for="bcc" class="col-sm-1 control-label">Subject:</label>
 				    	<div class="col-sm-11">
                               <input type="email" class="form-control select2-offscreen" id="bcc" placeholder="Enter subject" tabindex="-1" v-model="subject">
 				    	</div>
 				  	</div>
-				  
 				</form>
-				
 				<div class="col-sm-11 col-sm-offset-1">
-					
-					
 					<br>	
-					
 					<div class="form-group">
 						<textarea class="form-control" id="message" name="body" rows="12" placeholder="Click here to reply" v-model="messageText"></textarea>
 					</div>
-
 					<div>
 						<div class="form-group">
 							<label for="files">Attachments: </label>

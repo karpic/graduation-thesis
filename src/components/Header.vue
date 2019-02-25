@@ -2,30 +2,32 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <router-link to="/"><a class="navbar navbar-brand">Mailer</a></router-link>
+        <router-link to="/"><a class="navbar-brand">Mailer</a></router-link>
       </div>
-      <ul class="nav navbar-nav">
-        <router-link tag="li" to="/home" v-if="isSignedIn">
-          <a>Mail</a>
-        </router-link>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <router-link tag="li" to="/home" v-if="isSignedIn">
+            <a>Mail</a>
+          </router-link>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <form class="navbar-form navbar-left" v-if="isSignedIn" id="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search" v-model="query">
+            </div>
+            <button class="btn btn-default" @click.prevent="handleSearch">Submit</button>
+          </form>
+          <li v-if="!isSignedIn">
+            <button class="loginBtn loginBtn--google" @click="login">Login with Google</button>
+          </li>
+          <li v-if="isSignedIn">
+            <a>{{ username }} ( {{ emailAddress }} )</a>
+          </li>
+          <li v-if="isSignedIn">
+            <a @click="logout">Log out</a>
+          </li>
       </ul>
-      <form class="navbar-form navbar-left" v-if="isSignedIn">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search" v-model="query">
-        </div>
-        <button class="btn btn-default" @click.prevent="handleSearch">Submit</button>
-      </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li v-if="!isSignedIn">
-          <button class="loginBtn loginBtn--google" @click="login">Login with Google</button>
-        </li>
-        <li v-if="isSignedIn">
-          <a>{{ username }} ( {{ emailAddress }} )</a>
-        </li>
-        <li v-if="isSignedIn">
-          <a @click="logout">Log out</a>
-        </li>
-      </ul>
+    </div>
     </div>
   </nav>
 </template>
@@ -117,5 +119,11 @@ export default {
     .loginBtn--google:hover,
     .loginBtn--google:focus {
         background: #e74b37;
+    }
+    #search{
+      text-align: center;
+    }
+    #search input[type=text] {
+      width: 400px !important;
     }
 </style>

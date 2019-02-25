@@ -9,7 +9,7 @@
                 </tr>
             </thead>
             <tbody>
-                <app-message-list-item v-for="message in inboxMessages" :message="message" :key="message.id"></app-message-list-item>
+                <app-message-list-item v-for="message in sortedInboxMessages" :message="message" :key="message.id"></app-message-list-item>
             </tbody>
      </table>
      </div>
@@ -27,7 +27,14 @@
         computed: {
             ...mapGetters([
                 'inboxMessages'
-            ])
+            ]),
+            sortedInboxMessages() {
+                return this.inboxMessages.sort(
+                    (a, b) => {
+                        new Date(Number(a.internalDate)) - new Date(Number(b.internalDate))
+                    }
+                )
+            }
         },
         methods: {
             ...mapActions([

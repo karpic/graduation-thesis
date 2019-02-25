@@ -89,7 +89,6 @@ export default new Vuex.Store({
                       labels.push(labelResponse.result);
                     })
                   }
-                  console.log(labels);
                   context.commit("SET_LABELS", labels);
                 });
               vueInstance.$router.push({ name: 'allMessages' });
@@ -198,13 +197,12 @@ export default new Vuex.Store({
       });
     },
     sendMessageWithAttachments(context, { gapiHeaders, messageText, files }) {
-      /* let body = createBody({
+       let body = createMimeMessage({
         headers: gapiHeaders,
         textHtml: messageText,
         textPlain: messageText, 
         attachments: files
       });
-      console.log(body);
       let token = localStorage.getItem('token');
       let headers = {
         Authorization: `Bearer ${token}`,
@@ -217,7 +215,7 @@ export default new Vuex.Store({
             })
             .catch(function(error){
               console.log(error);
-            }); */
+            }); 
     },
     saveAsDraft(context, { headers, message }) {
       let gapi = context.getters.gapi;
@@ -238,7 +236,6 @@ export default new Vuex.Store({
         }
       });
       draftRequest.execute(function(resp) {
-        console.log(resp);
         alertify.success('Successfully created a draft message!');
         router.push({ name: 'allMessages' });
       })

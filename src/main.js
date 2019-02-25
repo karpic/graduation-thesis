@@ -1,11 +1,11 @@
-import Vue from 'vue'
 import store from './store/store';
-import VueGAPI from 'vue-gapi';
 import VueAlertify from 'vue-alertify';
 import { mapMutations } from 'vuex';
 import { router } from './router';
 import App from './App.vue'
 import DateFilter from './filters/date';
+import Vue from 'vue'
+import VueGAPI from 'vue-gapi';
 
 const apiConfig = {
   apiKey: 'AIzaSyD-dOyUXQS_9bNDYCCdKiWNwE6YhffsBpg',

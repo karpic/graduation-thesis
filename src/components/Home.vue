@@ -74,15 +74,9 @@
 <script>
   import { mapActions, mapGetters } from "vuex";
 
-  import Header from "./Header.vue";
-  import SignIn from "./SignIn.vue";
   import mixin from '../components/mixins/mixin.js';
   export default {
     mixins: [mixin],
-    components: {
-      appHeader: Header,
-      appSignIn: SignIn
-    },
     methods: {
       ...mapActions(["listAllMessages"]),
       list() {

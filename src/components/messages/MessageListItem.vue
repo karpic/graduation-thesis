@@ -8,7 +8,6 @@
 
 <script>
     import mixin from '../mixins/mixin.js';
-    import { mapActions } from 'vuex';
     export default {
         data() {
             return {
@@ -18,9 +17,6 @@
         mixins: [mixin],
         props: ['message'],
         methods: {
-            ...mapActions([
-                'deleteMessage'
-            ]),
             openMessage(messageId) {
                 this.$router.push({ name: 'messagePreview', params: { id: messageId }});
             }

@@ -153,7 +153,6 @@
                     'To': this.forwardTo,
                     'Subject': this.getHeader(this.message.payload.headers, 'Subject')
                 };
-                console.log(headers);
                 this.sendMessage({
                     headers,
                     message: this.forwardMessage
@@ -180,14 +179,12 @@
                         id: message.id,
                         removeLabelIds: ['UNREAD']
                     });
-                    modifyRequest.execute(function(respon) {
-                        
+                    modifyRequest.execute(function(respon) { 
                     });
-
                     //handle Attachments
                     let parts = message.payload.parts;
                     for (var i = 0; i < parts.length; i++) {
-                        var part = parts[i];
+                        let part = parts[i];
                         if (part.filename && part.filename.length > 0) {
                         var attachId = part.body.attachmentId;
                         var request = gapi.client.gmail.users.messages.attachments.get({
@@ -198,16 +195,15 @@
                         request.execute(function(attachment) {
                             let dataBase64Rep = attachment.data.replace(/-/g, '+').replace(/_/g, '/');
                             let urlBlob = that.b64toBlob(dataBase64Rep, part.mimeType, attachment.size);
-                            
                             let linkContainer = document.getElementById('attachmentDownloadLinks');
                             let dlTag = document.createElement('a');
+                            console.log(part.filename);
                             let linkText = document.createTextNode(part.filename);
                             dlTag.appendChild(linkText);
                             dlTag.href = urlBlob;
                             dlTag.download = part.filename;
                             linkContainer.appendChild(dlTag);
                             linkContainer.appendChild(document.createElement('br'));
-                            //URL.revokeObjectURL(urlBlob);
                         });
                         }
                     }
