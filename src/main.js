@@ -7,13 +7,6 @@ import DateFilter from './filters/date';
 import Vue from 'vue'
 import VueGAPI from 'vue-gapi';
 
-const apiConfig = {
-  apiKey: 'AIzaSyD-dOyUXQS_9bNDYCCdKiWNwE6YhffsBpg',
-  clientId: '239411929608-0okoo5064eo3ul5aucc5qqslksaqhn3t.apps.googleusercontent.com',
-  discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"],
-  scope: "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.modify https://mail.google.com/"
-};
-
 Vue.use(VueGAPI, apiConfig);
 Vue.use(VueAlertify);
 
